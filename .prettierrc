@@ -1,0 +1,12 @@
+{
+  "printWidth": 80,
+  "singleAttributePerLine": true,
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "singleAttributePerLine": false
+      }
+    }
+  ]
+}
