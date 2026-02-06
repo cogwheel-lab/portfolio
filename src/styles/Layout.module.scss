@@ -1,0 +1,14 @@
+/* 全ページ共通   */
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #ffffff;
+  min-height: 100vh;
+}
+
+.inner {
+  flex: 1;
+  padding: 0 24px;
+}

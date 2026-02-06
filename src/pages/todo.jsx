@@ -1,11 +1,17 @@
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import todoStyles from "@/components/Todo/Todo.module.scss";
+import { useStarAnimation } from "@/hooks/useStarAnimation";
 import { useTodo } from "@/hooks/useTodo";
+import layoutStyles from "@/styles/Layout.module.scss";
 import Head from "next/head";
+import { useRef } from "react";
 import { IoCheckmarkCircle, IoEllipse, IoTrash } from "react-icons/io5";
-import { Footer } from "src/components/Footer";
-import { Header } from "src/components/Header";
-import todoStyles from "src/components/Todo/Todo.module.scss";
-import styles from "src/styles/Home.module.css";
+
 const Todo = () => {
+  const addButtonRef = useRef(null);
+  const { triggerStars } = useStarAnimation();
+
   const {
     text,
     todos,
@@ -15,54 +21,82 @@ const Todo = () => {
     handleDelete,
     handleToggle,
   } = useTodo();
+
+  const handleAddWithStars = () => {
+    if (addButtonRef.current) {
+      const rect = addButtonRef.current.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      triggerStars(x, y);
+    }
+    handleAdd();
+  };
+
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <title>Todo Page</title>
       </Head>
-      <Header />
-      <input
-        type="text"
-        value={text}
-        onChange={handleChange}
-      />
-      <button onClick={handleAdd}>追加</button>
-      {todos.length > 0 && (
-        <ul className={todoStyles.todoList}>
-          {todos.map((item) => {
-            return (
-              <li
-                key={item.id}
-                className={todoStyles.todoItem}
-                onClick={() => handleToggle(item.id)}
-              >
-                {/* チェックアイコン（状態によって切り替え） */}
-                <button className={todoStyles.icon}>
-                  {item.completed ? <IoCheckmarkCircle /> : <IoEllipse />}
-                </button>
-                <span
-                  className={item.completed ? todoStyles.textcompleted : ""}
-                >
-                  {item.text} {item.completed}
-                </span>
-                <button
-                  className={`${todoStyles.icon} ${todoStyles.iconDelete}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(item.id);
-                  }}
-                >
-                  <IoTrash />
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-      {/* <Main page="index" /> */}
 
-      <Footer />
-    </div>
+      <div className={layoutStyles.container}>
+        <div className={layoutStyles.inner}>
+          <Header pageKey="todo" />
+          <div className={todoStyles.inner}>
+            <div className={todoStyles.inputArea}>
+              <input
+                type="text"
+                value={text}
+                onChange={handleChange}
+                placeholder="やることを入力..."
+              />
+              <button
+                ref={addButtonRef}
+                onClick={handleAddWithStars}
+              >
+                追加
+              </button>
+            </div>
+            {todos.length > 0 && (
+              <ul className={todoStyles.todoList}>
+                {todos.map((item) => {
+                  return (
+                    <li
+                      key={item.id}
+                      className={todoStyles.todoItem}
+                      onClick={() => handleToggle(item.id)}
+                    >
+                      {/* チェックアイコン（状態によって切り替え） */}
+                      <button className={todoStyles.icon}>
+                        {item.completed ? <IoCheckmarkCircle /> : <IoEllipse />}
+                      </button>
+                      <span
+                        className={
+                          item.completed ? todoStyles.textcompleted : ""
+                        }
+                      >
+                        {item.text}
+                      </span>
+                      <button
+                        className={`${todoStyles.icon} ${todoStyles.iconDelete}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(item.id);
+                        }}
+                      >
+                        <IoTrash />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </div>
+
+        <Footer />
+      </div>
+    </>
   );
 };
+
 export default Todo;

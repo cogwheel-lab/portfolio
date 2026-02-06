@@ -1,24 +1,78 @@
-.todoList {
-  background-color: #ccc;
-  list-style: none;
-  padding: 0;
-  width: 150px;
+/* ページ全体 */
+.page,
+.inner {
+  min-height: 100vh;
+  background-color: #fce7f3; /* ピンク背景 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
 }
+
+/* 入力エリア */
+.inputArea {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 400px;
+
+  :global(input) {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    &:focus {
+      border-color: #f472b6;
+    }
+  }
+
+  :global(button) {
+    padding: 10px 20px;
+    background-color: #f472b6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: opacity 0.2s;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+/* Todoリスト */
+.todoList {
+  background-color: white;
+  list-style: none;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
 .todoItem {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   background-color: #fff;
-  list-style: none;
-  padding: 0.1em 0.5em;
-  width: 100%;
-  border-bottom: 1px solid #ccc;
+  padding: 12px 8px;
+  border-bottom: 1px solid #f0f0f0;
+  &:last-child {
+    border-bottom: none;
+  }
   span {
     flex: 1;
+    margin-left: 10px;
+    font-size: 1rem;
   }
 }
 
 .icon {
-  // ボタンのデフォルトスタイルをリセット
   background: none;
   border: none;
   padding: 0;
@@ -38,10 +92,35 @@
 }
 
 .iconDelete {
-  margin-left: auto; // 右寄せ
-  color: #ef4444; // 赤色
+  margin-left: auto;
+  color: #ef4444;
 }
+
 .textcompleted {
-  // 打ち消し線おしえて
   text-decoration: line-through;
+  color: #999;
+}
+
+/* 星のアニメーション */
+.star {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1000;
+  animation: fly-and-fade 0.5s ease-out forwards;
+}
+
+@keyframes fly-and-fade {
+  0% {
+    transform: translate(0, 0) scale(0) rotate(0deg);
+    opacity: 1;
+  }
+  20% {
+    transform: translate(var(--tx), var(--ty)) scale(1) rotate(var(--rot));
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(var(--tx) * 1.5), calc(var(--ty) * 1.5))
+      scale(0.2) rotate(calc(var(--rot) * 1.5));
+    opacity: 0;
+  }
 }
