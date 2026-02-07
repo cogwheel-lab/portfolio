@@ -20,7 +20,7 @@ const App = ({ Component, pageProps }) => {
         />
         <link
           rel="icon"
-          href="/images/Gemini_Generated_Image_d1y7jtd1y7jtd1y7 (1).png"
+          href="/images/logo.png"
         />
       </Head>
       <Component {...pageProps} />
