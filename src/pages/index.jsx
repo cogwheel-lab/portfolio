@@ -77,7 +77,6 @@ const Home = () => {
           >
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>Practice</h2>
-              {/* <p className={styles.sectionDesc}>学習用作品</p> */}
             </div>
             <div className={styles.worksGrid}>
               {works.map((work, index) => (
@@ -119,14 +118,17 @@ const Home = () => {
               <button
                 onClick={() => {
                   setPage(page + 1);
-                  const current = localStorage.getItem("clickCount") || "0";
-                  const newCount = Number(current) + 1;
+                  const current = localStorage.getItem("clickData"); //保存されてるのをとってくる
+                  const obj = current
+                    ? JSON.parse(current)
+                    : { count: 0, time: new Date().toISOString() };
+                  const hourPassed = new Date() - new Date(obj.time) > 3600000;
+                  const currentCount = hourPassed ? 0 : obj.count;
+                  const newCount = currentCount + 1;
                   const data = {
                     count: newCount,
                     time: new Date().toISOString(),
                   };
-
-                  // localStorage.setItem("clickCount", String(newCount));
                   localStorage.setItem("clickData", JSON.stringify(data));
                 }}
               >

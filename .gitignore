@@ -27,3 +27,13 @@ BK
 
 *.code-workspace
 .claude/settings.*.json
+
+tasks.md
+claude.md
+.claude/
+.vscode/
+
+# Internal documentation (not for public repo)
+FORyou.md
+project_definition.md
+.github/copilot-instructions.md
