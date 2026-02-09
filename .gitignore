@@ -27,7 +27,7 @@ BK
 
 *.code-workspace
 .claude/settings.*.json
-
+idea.md
 tasks.md
 claude.md
 .claude/

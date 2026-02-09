@@ -7,7 +7,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 
 const Home = () => {
-  const [photos, setPhotos] = useState([]); // 取得した写真を保存する箱
+  const [photos, setPhotos] = useState([]);
   const [loadCount, setLoadCount] = useState(0);
   const works = [
     {
@@ -28,13 +28,22 @@ const Home = () => {
     if (saved) {
       const date = JSON.parse(saved);
       const hourPassed = new Date() - new Date(date.time) > 3600000;
+      // 1時間以内
       if (!hourPassed) {
         setLoadCount(date.loadCount);
         setPhotos(date.photos || []);
-        // photosも復元する必要があることをメモ
       } else {
+        // 1時間以上でデータ削除
         localStorage.removeItem("clickData");
         // 初回訪問の処理
+        localStorage.setItem(
+          "clickData",
+          JSON.stringify({
+            loadCount: 0,
+            time: new Date().toISOString(),
+            photos: [],
+          }),
+        );
       }
     } else {
       //※savedがnullの場合＝初回訪問
@@ -50,17 +59,12 @@ const Home = () => {
   }, []);
   // 画像取得のロジック
   useEffect(() => {
-    if (loadCount === 0) return;
-
+    // 保存済みデータがある場合はスキップ;
     const saved = localStorage.getItem("clickData");
     if (saved) {
-      const date = JSON.parse(saved);
-      const hourPassed = new Date() - new Date(date.time) > 3600000;
-
-      if (!hourPassed) {
-        if (date.loadCount >= loadCount) {
-          return;
-        }
+      const data = JSON.parse(saved);
+      if (data.photos && data.photos.length >= (loadCount + 1) * 3) {
+        return;
       }
     }
 
@@ -72,7 +76,6 @@ const Home = () => {
       })
       .then((result) => {
         if (result.response) {
-          console.log("取得した画像データ:", result.response.results);
           const filteredPhotos = result.response.results.map((photo) => ({
             id: photo.id,
             urls: { raw: photo.urls.raw },
@@ -86,6 +89,7 @@ const Home = () => {
             ? JSON.parse(currentData)
             : { loadCount: 0, time: new Date().toISOString(), photos: [] };
           obj.photos = [...(obj.photos || []), ...filteredPhotos];
+          obj.loadCount = loadCount;
           localStorage.setItem("clickData", JSON.stringify(obj));
         }
       });
@@ -168,9 +172,6 @@ const Home = () => {
                     time: new Date().toISOString(),
                     photos: photos,
                   };
-
-                  console.log(loadCount);
-                  localStorage.setItem("clickData", JSON.stringify(data));
                 }}
                 className={styles.loadMoreButton}
               >
