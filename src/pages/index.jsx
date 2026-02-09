@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 const Home = () => {
   const [photos, setPhotos] = useState([]); // 取得した写真を保存する箱
-  const [page, setPage] = useState(1);
+  const [loadCount, setLoadCount] = useState(0);
   const works = [
     {
       title: "Todoアプリ",
@@ -16,45 +16,80 @@ const Home = () => {
       href: "/todo",
     },
     {
-      title: "コンビニナビ",
-      description: "位置情報、GoogleMapAPIの練習",
-      href: "#",
-    },
-    {
       title: "なんとか診断",
       description: "分岐の練習",
       href: "#",
     },
-    // {
-    //   title: "あみだくじ",
-    //   description: "分岐の練習",
-    //   href: "#",
-    // },
-    {
-      title: "一問一答",
-      description: "Groq API",
-      href: "#",
-    },
   ];
 
-  // 画像取得のロジックをここに統合
+  // 初回読み込み時にlocalStorageから1時間経ったかロジック
   useEffect(() => {
+    const saved = localStorage.getItem("clickData");
+    if (saved) {
+      const date = JSON.parse(saved);
+      const hourPassed = new Date() - new Date(date.time) > 3600000;
+      if (!hourPassed) {
+        setLoadCount(date.loadCount);
+        setPhotos(date.photos || []);
+        // photosも復元する必要があることをメモ
+      } else {
+        localStorage.removeItem("clickData");
+        // 初回訪問の処理
+      }
+    } else {
+      //※savedがnullの場合＝初回訪問
+      localStorage.setItem(
+        "clickData",
+        JSON.stringify({
+          loadCount: 0,
+          time: new Date().toISOString(),
+          photos: [],
+        }),
+      );
+    }
+  }, []);
+  // 画像取得のロジック
+  useEffect(() => {
+    if (loadCount === 0) return;
+
+    const saved = localStorage.getItem("clickData");
+    if (saved) {
+      const date = JSON.parse(saved);
+      const hourPassed = new Date() - new Date(date.time) > 3600000;
+
+      if (!hourPassed) {
+        if (date.loadCount >= loadCount) {
+          return;
+        }
+      }
+    }
+
     unsplash.search
       .getPhotos({
         query: "nature",
-        page: page,
-        perPage: 3, // まずは3枚表示してみる
+        page: loadCount + 1, // pageはUnsplash API
+        perPage: 3, //  perPageはUnsplash API。3枚表示してみる
       })
       .then((result) => {
         if (result.response) {
           console.log("取得した画像データ:", result.response.results);
-          setPhotos((prevPhotos) => [
-            ...prevPhotos,
-            ...result.response.results,
-          ]); // 既存の写真に追加
+          const filteredPhotos = result.response.results.map((photo) => ({
+            id: photo.id,
+            urls: { raw: photo.urls.raw },
+            alt_description: photo.alt_description,
+            user: { name: photo.user.name },
+          }));
+
+          setPhotos((prevPhotos) => [...prevPhotos, ...filteredPhotos]); // 既存の写真に追加
+          const currentData = localStorage.getItem("clickData");
+          const obj = currentData
+            ? JSON.parse(currentData)
+            : { loadCount: 0, time: new Date().toISOString(), photos: [] };
+          obj.photos = [...(obj.photos || []), ...filteredPhotos];
+          localStorage.setItem("clickData", JSON.stringify(obj));
         }
       });
-  }, [page]);
+  }, [loadCount]);
 
   return (
     <>
@@ -100,7 +135,10 @@ const Home = () => {
           </section>
 
           <section>
-            <h3>新着順または閲覧履歴からのおすすめ</h3>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>Unsplash API</h2>
+              <p>現在の読み込み回数: {loadCount}回</p>
+            </div>
             <div className={styles.photobox}>
               {photos.map((photo) => (
                 <div key={photo.id}>
@@ -114,29 +152,33 @@ const Home = () => {
                 </div>
               ))}
             </div>
-            {page < 3 && (
+            {loadCount < 2 && (
               <button
                 onClick={() => {
-                  setPage(page + 1);
+                  setLoadCount(loadCount + 1);
                   const current = localStorage.getItem("clickData"); //保存されてるのをとってくる
                   const obj = current
                     ? JSON.parse(current)
-                    : { count: 0, time: new Date().toISOString() };
+                    : { loadCount: 0, time: new Date().toISOString() };
                   const hourPassed = new Date() - new Date(obj.time) > 3600000;
-                  const currentCount = hourPassed ? 0 : obj.count;
+                  const currentCount = hourPassed ? 0 : obj.loadCount;
                   const newCount = currentCount + 1;
                   const data = {
-                    count: newCount,
+                    loadCount: newCount,
                     time: new Date().toISOString(),
+                    photos: photos,
                   };
+
+                  console.log(loadCount);
                   localStorage.setItem("clickData", JSON.stringify(data));
                 }}
+                className={styles.loadMoreButton}
               >
                 もっと見る
               </button>
             )}
             <p className={styles.attention}>
-              もっと見るボタンはおひとりさま1時間2回までです
+              もっと見るボタンはおひとりさま1時間2回まで押すことができます
             </p>
           </section>
         </div>

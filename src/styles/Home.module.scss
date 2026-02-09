@@ -90,7 +90,7 @@
 /* Works Grid */
 .worksGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 24px;
 }
 
@@ -162,4 +162,30 @@
 
 .attention {
   color: red;
+  text-align: center;
+  font-size: 12px;
+}
+
+.loadMoreButton {
+  background: transparent;
+  border: 2px solid var(--primary-light);
+  color: var(--primary-light);
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 32px auto;
+  display: block;
+
+  &:hover {
+    background: var(--primary-light);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
