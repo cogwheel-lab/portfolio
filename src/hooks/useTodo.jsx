@@ -1,15 +1,32 @@
-import { useCallback, useState } from "react";
+// src/hooks/useTodo.jsx
+import { useCallback, useEffect, useState } from "react";
 
 export const useTodo = () => {
+  const saveTodos = (todosArray) => {
+    try {
+      localStorage.setItem("todos", JSON.stringify(todosArray));
+    } catch (error) {
+      console.log("localStorage保存エラー:", error);
+    }
+  };
   const [text, setText] = useState("");
-  // const [todos, setTodos] = useState([]);
   const [todos, setTodos] = useState([
     { id: 1, text: "牛乳を買う", completed: false },
     { id: 2, text: "レポートを提出する", completed: true },
     { id: 3, text: "ジムに行く", completed: false },
   ]);
   const [nextId, setNextId] = useState(4);
-  // const [nextId, setNextId] = useState(1);
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("todos");
+      if (saved) {
+        setTodos(JSON.parse(saved));
+      }
+    } catch (error) {
+      console.log("localStorage読み込みエラー:", error);
+    }
+  }, []);
+
   const handleAdd = useCallback(() => {
     setTodos((prevArray) => {
       if (prevArray.some((todos) => todos.text === text)) {
@@ -24,8 +41,10 @@ export const useTodo = () => {
           completed: false,
         },
       ];
+      saveTodos(newTodos);
       return newTodos;
     });
+
     setNextId((prevId) => prevId + 1);
   }, [text, nextId]);
   const handleChange = useCallback((e) => {
@@ -34,21 +53,20 @@ export const useTodo = () => {
   const handleDelete = useCallback((id) => {
     setTodos((prevTodos) => {
       const newTodos = prevTodos.filter((todo) => todo.id !== id);
+      saveTodos(newTodos);
       return newTodos; // 明示的に「新しい配列」と分かる
     });
   }, []);
   const handleToggle = useCallback((id) => {
-    // console.log("ハンドルだよー：", id);
-    // console.log("ハンドルだよー：", todos[id - 1].completed);
     setTodos((prevTodos) => {
-      // id番号のチェックをオンオフ
-      return prevTodos.map((todo) => {
-        // ← return 1
+      const newTodos = prevTodos.map((todo) => {
         if (todo.id === id) {
-          return { ...todo, completed: !todo.completed }; // ← return 2
+          return { ...todo, completed: !todo.completed };
         }
-        return todo; // ← return 3
+        return todo;
       });
+      saveTodos(newTodos);
+      return newTodos;
     });
   }, []);
   return {
