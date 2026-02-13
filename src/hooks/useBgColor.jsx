@@ -1,4 +1,5 @@
 "use client";
+import layoutStyles from "@/styles/Layout.module.scss";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
@@ -7,8 +8,8 @@ export const useBgColor = () => {
 
   const bgColor = useMemo(() => {
     const colorMap = {
-      "/": "lightblue",
-      "/todo": "pink",
+      "/": layoutStyles.lightblue,
+      "/todo": layoutStyles.pink,
     };
 
     return colorMap[pathname] || ""; // クラス名を返す

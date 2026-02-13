@@ -17,13 +17,13 @@
   border-radius: 6px;
   border: 1px solid var(--border);
   transition: all 0.3s ease;
-}
+  background: #fff;
 
-.headerLink:hover {
-  background: var(--bg-card);
-  border-color: var(--primary);
+  &:hover {
+    background: #fff;
+    border-color: var(--primary);
+  }
 }
-
 .logo {
   font-size: clamp(1.2rem, 6vw, 1.4rem);
   font-weight: 700;
