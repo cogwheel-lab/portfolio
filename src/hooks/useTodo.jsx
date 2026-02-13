@@ -69,6 +69,16 @@ export const useTodo = () => {
       return newTodos;
     });
   }, []);
+  const handlePreset = (presetArray) => {
+    const todosWithID = presetArray.map((item, index) => ({
+      id: nextID + index,
+      text: item.text,
+      completed: item.completed,
+    }));
+    setTodos = [...todos, ...todosWithID];
+    saveTodos = [...todos, ...todosWithID];
+  };
+
   return {
     text,
     todos,
@@ -77,5 +87,6 @@ export const useTodo = () => {
     handleChange,
     handleDelete,
     handleToggle,
+    handlePreset,
   };
 };

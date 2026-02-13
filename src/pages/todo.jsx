@@ -13,7 +13,11 @@ const Todo = () => {
   const bgColorClass = useBgColor();
   const addButtonRef = useRef(null);
   const { triggerStars } = useStarAnimation();
-
+  const presetTodos = [
+    { text: "朝食を食べる", completed: false },
+    { text: "メールをチェックする", completed: false },
+    { text: "1時間勉強する", completed: false },
+  ];
   const {
     text,
     todos,
