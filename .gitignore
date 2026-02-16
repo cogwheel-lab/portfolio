@@ -38,6 +38,7 @@ FORyou.md
 project_definition.md
 .github/copilot-instructions.md
 ignored_files/
+docs/
 
 # Agent-specific documentation
 gemini.md
