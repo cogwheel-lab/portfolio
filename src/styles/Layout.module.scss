@@ -4,8 +4,14 @@
   flex-direction: column;
   max-width: 1200px;
   margin: 0 auto;
-  background: #ffffff;
+  background-color: #ffffff;
   min-height: 100vh;
+  &.pink {
+    background-color: #ffeccc;
+  }
+  &.lightblue {
+    background-color: lightblue;
+  }
 }
 
 .inner {

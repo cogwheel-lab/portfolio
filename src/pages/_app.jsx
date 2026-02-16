@@ -5,6 +5,7 @@ const App = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
+        <script src="http://localhost:8097"></script>
         <link
           rel="preconnect"
           href="https://fonts.googleapis.com"

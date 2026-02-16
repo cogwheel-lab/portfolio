@@ -17,6 +17,7 @@
     "unsplash-js": "^7.0.20"
   },
   "devDependencies": {
+    "react-devtools": "^7.0.1",
     "sass": "^1.97.3"
   }
 }
