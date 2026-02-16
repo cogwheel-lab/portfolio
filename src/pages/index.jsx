@@ -1,26 +1,16 @@
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { unsplash } from "@/lib/unsplash";
+import { works } from "@/lib/works";
 import styles from "@/styles/Home.module.scss";
 import layoutStyles from "@/styles/Layout.module.scss";
 import Head from "next/head";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Home = () => {
   const [photos, setPhotos] = useState([]);
   const [loadCount, setLoadCount] = useState(0);
-  const works = [
-    {
-      title: "Todoアプリ",
-      description: "ただのTodoの練習",
-      href: "/todo",
-    },
-    {
-      title: "なんとか診断",
-      description: "分岐の練習",
-      href: "#",
-    },
-  ];
 
   // 初回読み込み時にlocalStorageから1時間経ったかロジック
   useEffect(() => {
@@ -119,21 +109,17 @@ const Home = () => {
             </div>
             <div className={styles.worksGrid}>
               {works.map((work, index) => (
-                <div
+                <Link
                   key={index}
                   className={styles.workCard}
+                  href={work.href}
                 >
                   <div className={styles.workInfo}>
                     <h3>{work.title}</h3>
                     <p>{work.description}</p>
-                    <a
-                      href={work.href}
-                      className={styles.workLink}
-                    >
-                      View →
-                    </a>
+                    <span>View →</span>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </section>

@@ -1,3 +1,4 @@
+import { works } from "@/lib/works";
 import Link from "next/link";
 import styles from "./Footer.module.scss";
 
@@ -19,21 +20,17 @@ export const Footer = () => {
       </div>
       <div>
         <ul className={styles.footerLink}>
-          <li>
-            <Link href="./">トップ</Link>
-          </li>
-          <li>
-            <Link href="./">Todoアプリ</Link>
-          </li>
-          <li>
-            <Link href="./">コンビニアプリ</Link>
-          </li>
-          <li>
-            <Link href="./">なんとか診断</Link>
-          </li>
-          <li>
-            <Link href="./">あみだくじ</Link>
-          </li>
+          {works.map((work, index) => (
+            <li key={work.href}>
+              <Link
+                key={index}
+                className={styles.workCard}
+                href={work.href}
+              >
+                {work.title}
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
       <p className={styles.footerText}>
