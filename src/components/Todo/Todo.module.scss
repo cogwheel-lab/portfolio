@@ -123,3 +123,20 @@
     opacity: 0;
   }
 }
+
+.presetButton {
+  margin: 0 auto 60px;
+  display: block;
+  padding: 10px 20px;
+  background-color: #1a6eff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: opacity 0.2s;
+  &:hover {
+    opacity: 0.8;
+  }
+}

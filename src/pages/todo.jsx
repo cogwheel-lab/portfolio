@@ -26,6 +26,7 @@ const Todo = () => {
     handleChange,
     handleDelete,
     handleToggle,
+    handlePreset,
   } = useTodo();
 
   const handleAddWithStars = () => {
@@ -97,6 +98,12 @@ const Todo = () => {
               </ul>
             )}
           </div>
+          <button
+            onClick={() => handlePreset(presetTodos)}
+            className={todoStyles.presetButton}
+          >
+            プリセットを追加
+          </button>
         </div>
 
         <Footer />

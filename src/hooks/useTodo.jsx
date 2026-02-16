@@ -70,13 +70,17 @@ export const useTodo = () => {
     });
   }, []);
   const handlePreset = (presetArray) => {
-    const todosWithID = presetArray.map((item, index) => ({
-      id: nextID + index,
+    const todosWithId = presetArray.map((item, index) => ({
+      id: nextId + index,
       text: item.text,
       completed: item.completed,
     }));
-    setTodos = [...todos, ...todosWithID];
-    saveTodos = [...todos, ...todosWithID];
+    setTodos((prevArray) => {
+      const newTodos = [...prevArray, ...todosWithId];
+      saveTodos(newTodos);
+      return newTodos;
+    });
+    setNextId((prevId) => prevId + presetArray.length);
   };
 
   return {
