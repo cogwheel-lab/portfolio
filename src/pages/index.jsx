@@ -1,6 +1,7 @@
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { unsplash } from "@/lib/unsplash";
+import { works } from "@/lib/works";
 import styles from "@/styles/Home.module.scss";
 import layoutStyles from "@/styles/Layout.module.scss";
 import Head from "next/head";
@@ -10,18 +11,6 @@ import { useEffect, useState } from "react";
 const Home = () => {
   const [photos, setPhotos] = useState([]);
   const [loadCount, setLoadCount] = useState(0);
-  const works = [
-    {
-      title: "Todoアプリ",
-      description: "Todoアプリの練習",
-      href: "/todo",
-    },
-    {
-      title: "もっと見る",
-      description: "Unsplash APIを使って画像を表示する練習",
-      href: "#unsplash",
-    },
-  ];
 
   // 初回読み込み時にlocalStorageから1時間経ったかロジック
   useEffect(() => {
