@@ -27,20 +27,17 @@ BK
 
 *.code-workspace
 .claude/settings.*.json
-idea.md
-tasks.md
-claude.md
+
 .claude/
 .vscode/
 
 # Internal documentation (not for public repo)
 FORyou.md
-project_definition.md
 .github/copilot-instructions.md
 ignored_files/
 docs/
-portfolio-isshu/
 
 # Agent-specific documentation
 gemini.md
-todo-definition.md
+claude.md
+
