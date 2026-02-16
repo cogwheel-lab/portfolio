@@ -39,6 +39,7 @@ project_definition.md
 .github/copilot-instructions.md
 ignored_files/
 docs/
+portfolio-isshu/
 
 # Agent-specific documentation
 gemini.md

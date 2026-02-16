@@ -67,18 +67,17 @@
   margin-bottom: 16px;
   position: relative;
   display: inline-block;
-}
-
-.sectionTitle::after {
-  content: "";
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 3px;
-  background: var(--gradient-1);
-  border-radius: 2px;
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 3px;
+    background: var(--gradient-1);
+    border-radius: 2px;
+  }
 }
 
 .sectionDesc {
@@ -100,27 +99,32 @@
   border-radius: 16px;
   overflow: hidden;
   transition: all 0.3s ease;
-}
 
-.workCard:hover {
-  transform: translateY(-4px);
-  border-color: rgba(99, 102, 241, 0.3);
+  &:hover {
+    transform: translateY(-4px);
+    border-color: rgba(99, 102, 241, 0.3);
+  }
 }
 
 .workInfo {
+  display: flex;
+  flex-direction: column;
+
   padding: 16px;
-}
+  h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
 
-.workInfo h3 {
-  font-size: 0.95rem;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.workInfo p {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  margin-bottom: 8px;
+  p {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+  }
+  & > span {
+    align-self: flex-end;
+  }
 }
 
 .workLink {

@@ -1,6 +1,11 @@
 import Link from "next/link";
 import styles from "./Footer.module.scss";
 
+const FOOTER_LINKS = [
+  { href: "./", text: "トップ" },
+  { href: "./todo", text: "Todoアプリ" },
+];
+
 export const Footer = () => {
   return (
     <footer className={styles.footer}>
@@ -19,21 +24,11 @@ export const Footer = () => {
       </div>
       <div>
         <ul className={styles.footerLink}>
-          <li>
-            <Link href="./">トップ</Link>
-          </li>
-          <li>
-            <Link href="./">Todoアプリ</Link>
-          </li>
-          <li>
-            <Link href="./">コンビニアプリ</Link>
-          </li>
-          <li>
-            <Link href="./">なんとか診断</Link>
-          </li>
-          <li>
-            <Link href="./">あみだくじ</Link>
-          </li>
+          {FOOTER_LINKS.map((link) => (
+            <li key={link.href}>
+              <Link href={link.href}>{link.text}</Link>
+            </li>
+          ))}
         </ul>
       </div>
       <p className={styles.footerText}>
