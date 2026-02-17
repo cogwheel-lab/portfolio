@@ -38,6 +38,5 @@ ignored_files/
 docs/
 
 # Agent-specific documentation
-gemini.md
 claude.md
 

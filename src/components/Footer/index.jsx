@@ -20,6 +20,14 @@ export const Footer = () => {
       </div>
       <div>
         <ul className={styles.footerLink}>
+          <li>
+            <Link
+              className={styles.workCard}
+              href="./"
+            >
+              トップ
+            </Link>
+          </li>
           {works.map((work, index) => (
             <li key={work.href}>
               <Link
