@@ -2,25 +2,26 @@
 import { useCallback, useEffect, useState } from "react";
 
 export const useTodo = () => {
-  const saveTodos = (todosArray) => {
+  const saveTodos = useCallback((todosArray) => {
     try {
       localStorage.setItem("todos", JSON.stringify(todosArray));
     } catch (error) {
       console.log("localStorage保存エラー:", error);
     }
-  };
+  }, []);
   const [text, setText] = useState("");
-  const [todos, setTodos] = useState([
-    { id: 1, text: "牛乳を買う", completed: false },
-    { id: 2, text: "レポートを提出する", completed: true },
-    { id: 3, text: "ジムに行く", completed: false },
-  ]);
-  const [nextId, setNextId] = useState(4);
+  const [todos, setTodos] = useState([]);
+  const [nextId, setNextId] = useState(1);
   useEffect(() => {
     try {
       const saved = localStorage.getItem("todos");
       if (saved) {
+        const savedTodos = JSON.parse(saved);
         setTodos(JSON.parse(saved));
+        if (savedTodos.length > 0) {
+          const maxId = Math.max(...savedTodos.map((todo) => todo.id));
+          setNextId(maxId + 1);
+        }
       }
     } catch (error) {
       console.log("localStorage読み込みエラー:", error);
@@ -29,10 +30,6 @@ export const useTodo = () => {
 
   const handleAdd = useCallback(() => {
     setTodos((prevArray) => {
-      if (prevArray.some((todos) => todos.text === text)) {
-        alert("同じのがあるよ");
-        return prevArray;
-      }
       const newTodos = [
         ...prevArray,
         {
@@ -44,31 +41,40 @@ export const useTodo = () => {
       saveTodos(newTodos);
       return newTodos;
     });
-
     setNextId((prevId) => prevId + 1);
-  }, [text, nextId]);
-  const handleChange = useCallback((e) => {
-    setText(e.target.value);
-  }, []);
-  const handleDelete = useCallback((id) => {
-    setTodos((prevTodos) => {
-      const newTodos = prevTodos.filter((todo) => todo.id !== id);
-      saveTodos(newTodos);
-      return newTodos; // 明示的に「新しい配列」と分かる
-    });
-  }, []);
-  const handleToggle = useCallback((id) => {
-    setTodos((prevTodos) => {
-      const newTodos = prevTodos.map((todo) => {
-        if (todo.id === id) {
-          return { ...todo, completed: !todo.completed };
-        }
-        return todo;
+    setText("");
+  }, [text, nextId, saveTodos]);
+  const handleChange = useCallback(
+    (e) => {
+      setText(e.target.value);
+    },
+    [saveTodos],
+  );
+  const handleDelete = useCallback(
+    (id) => {
+      setTodos((prevTodos) => {
+        const newTodos = prevTodos.filter((todo) => todo.id !== id);
+        saveTodos(newTodos);
+        return newTodos;
       });
-      saveTodos(newTodos);
-      return newTodos;
-    });
-  }, []);
+    },
+    [saveTodos],
+  );
+  const handleToggle = useCallback(
+    (id) => {
+      setTodos((prevTodos) => {
+        const newTodos = prevTodos.map((todo) => {
+          if (todo.id === id) {
+            return { ...todo, completed: !todo.completed };
+          }
+          return todo;
+        });
+        saveTodos(newTodos);
+        return newTodos;
+      });
+    },
+    [saveTodos],
+  );
   const handlePreset = (presetArray) => {
     const todosWithId = presetArray.map((item, index) => ({
       id: nextId + index,
