@@ -1,12 +1,12 @@
 export const works = [
   {
     title: "Todoアプリ",
-    description: "Todoアプリの練習",
+    description: "localStorageとスプレッド構文とuseStateで作ったTodoリスト",
     href: "/todo",
   },
   {
     title: "もっと見るボタン",
-    description: "Unsplash APIを使って画像を表示する練習",
-    href: "#unsplash",
+    description: "Unsplash APIとスプレッド構文で画像を読み込む",
+    href: "/photo-load-more",
   },
 ];
